@@ -1,7 +1,7 @@
 
 pipeline {
     environment {
-        registry = "sandeep4642/demo-app/demo-frontend-angular" 
+        registry = "sandeep4642/demo-frontend-angular" 
         registryCredential = 'dockerhub'
         dockerImage = ''
     }
