@@ -10,8 +10,8 @@ pipeline {
         stage ('Build') {
             agent any
             steps {
-                sh 'npm install'
-                sh 'npm run build' 
+                bat 'npm install'
+                bat 'npm run build' 
                 stash includes: '*', name: 'app'
             }
         }
