@@ -25,14 +25,15 @@ pipeline {
             } 
             }
         }
-         stage('Deploy our image into Registry') 
-             agent {label "slave"} 
-             steps { 
+        stage ('Deploy our image into Registry'){
+            agent {label "slave"} 
+            steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
                     dockerImage.push() 
                     }
                 } 
             }
+          }
         }
     }
