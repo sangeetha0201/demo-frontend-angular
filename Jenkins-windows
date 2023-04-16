@@ -5,7 +5,6 @@ pipeline {
             steps {
                 withSonarQubeEnv('local-sonar') {
                    bat 'ng test --code-coverage'
-                   bat 'mvn sonar:sonar' 
                 }
             }
         }
