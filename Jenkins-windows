@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('local-sonar') {
+                   bat 'ng test --code-coverage'
+                   bat 'mvn sonar:sonar' 
+                }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                sleep(60)
+                timeout(time: 3, unit: 'MINUTES') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: false
+                }
+            }
+        }
+        }
+    }
