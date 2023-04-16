@@ -4,6 +4,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('local-sonar') {
+                   bat 'npm install'
                    bat 'ng test --code-coverage'
                 }
             }
