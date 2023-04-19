@@ -8,7 +8,7 @@ pipeline {
     agent none
     stages { 
         stage ('Build') {
-            agent any
+            agent { label "master"}
             steps {
                 bat 'npm install'
                 bat 'npm run build' 
@@ -17,7 +17,7 @@ pipeline {
         }
 
         stage ('Build Docker image') {
-            agent {label "slave"}
+            agent { label "docker-slave"}
             steps {
                 unstash 'app'
                 script { 
@@ -26,13 +26,19 @@ pipeline {
             }
         }
         stage ('Deploy our image into Registry'){
-            agent {label "slave"} 
+            agent { label "docker-slave"}
             steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
                     dockerImage.push() 
                     }
                 } 
+            }
+          }
+          stage('Remove Unused docker image') {
+            agent { label "docker-slave"}
+            steps{
+              sh "docker rmi $registry:$BUILD_NUMBER"
             }
           }
         }
