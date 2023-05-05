@@ -23,7 +23,6 @@ pipeline {
             }
         }
         stage ('Deploy our image into Registry'){
-            agent { label "docker-slave"}
             steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
