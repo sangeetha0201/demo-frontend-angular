@@ -4,29 +4,25 @@ pipeline {
         registry = "sandeep4642/demo-frontend-angular" 
         registryCredential = 'dockerhub'
         dockerImage = ''
+        appname = "demo-frontend-angular"
     }
-    agent none
+    agent { label "docker-slave"} 
     stages { 
         stage ('Build') {
-            agent { label "master"}
             steps {
-                bat 'npm install'
-                bat 'npm run build' 
-                stash includes: '*', name: 'app'
+                sh 'npm install'
+                sh 'npm run build' 
             }
         }
 
-        stage ('Build Docker image') {
-            agent { label "docker-slave"}
+        stage ('Build Docker image') { 
             steps {
-                unstash 'app'
                 script { 
                 dockerImage = docker.build registry + ":$BUILD_NUMBER" 
             } 
             }
         }
         stage ('Deploy our image into Registry'){
-            agent { label "docker-slave"}
             steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
@@ -36,10 +32,16 @@ pipeline {
             }
           }
           stage('Remove Unused docker image') {
-            agent { label "docker-slave"}
             steps{
               sh "docker rmi $registry:$BUILD_NUMBER"
             }
           }
+          stage('Deploy to Server'){ 
+            steps{
+                sh 'whoami'
+                sh 'ansible-playbook /home/jenkins/angular-deploy.yml --extra-vars "deploy_server=dev" --extra-vars "job_name=$registry"  --extra-vars "container_name=$appname" --extra-vars "build_no=$BUILD_NUMBER" --extra-vars "port_no=8000"'
+                
+            }
+        }
         }
     }
