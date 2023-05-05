@@ -6,6 +6,6 @@ COPY . /apps
 
 WORKDIR /apps
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD ["ng", "serve", "--port", "8000"]
+CMD ["ng", "serve", "--port", "8080"]
