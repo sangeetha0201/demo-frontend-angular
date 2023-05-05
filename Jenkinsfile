@@ -40,7 +40,7 @@ pipeline {
           stage('Deploy to Server'){ 
             steps{
                 sh 'whoami'
-                sh 'ansible-playbook /home/jenkins/angular-deploy.yml --extra-vars "deploy_server=dev" --extra-vars "job_name=$registry"  --extra-vars "container_name=$appname" --extra-vars "build_no=$BUILD_NUMBER" --extra-vars "port_no=8080"'
+                sh 'ansible-playbook /home/jenkins/angular-deploy.yml --extra-vars "deploy_server=dev" --extra-vars "job_name=$registry"  --extra-vars "container_name=$appname" --extra-vars "build_no=$BUILD_NUMBER" --extra-vars "port_no=8000"'
                 
             }
         }
