@@ -4,7 +4,7 @@ pipeline {
         registry = "sandeep4642/demo-frontend-angular" 
         registryCredential = 'dockerhub'
         dockerImage = ''
-        appname = demo-frontend-angular
+        appname = "demo-frontend-angular"
     }
     agent { label "docker-slave"} 
     stages { 
