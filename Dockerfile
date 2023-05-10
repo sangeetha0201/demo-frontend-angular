@@ -1,4 +1,4 @@
-FROM sandeep4642/angular14:1
+FROM sandeep4642/angular14:2
 
 RUN  mkdir /apps
 
