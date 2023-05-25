@@ -11,16 +11,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Convert YAML to Table
-        uses: actions/github-script@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          script: |
-            const fs = require('fs');
-            const yaml = require('js-yaml');
+          node-version: '14'
 
-            const fileContent = fs.readFileSync('input.yml', 'utf8');
-            const data = yaml.safeLoad(fileContent);
+      - name: Install dependencies
+        run: npm install js-yaml table
 
-            const tableData = Object.entries(data).map(([key, value]) => [key, value]);
+      - name: Convert YAML to Table
+        run: |
+          const fs = require('fs');
+          const yaml = require('js-yaml');
+          const { table } = require('table');
 
-            console.log(table(tableData, { align: ['l', 'l'] }));
+          const fileContent = fs.readFileSync('input.yaml', 'utf8');
+          const data = yaml.safeLoad(fileContent);
+
+          const tableData = Object.entries(data).map(([key, value]) => [key, value]);
+
+          console.log(table(tableData, { align: ['l', 'l'] }));
