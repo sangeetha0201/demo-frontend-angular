@@ -1,0 +1,22 @@
+name: YAML to Table
+on:
+  push:
+    branches:
+      - main  # Adjust this branch name if needed
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Convert YAML to Table
+        run: |
+          npm install -g yaml-convert-table
+          yaml-convert-table input.yml output.txt
