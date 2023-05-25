@@ -1,27 +1,26 @@
-name: YAML to Table
+name: Convert YAML to Table
 on:
   push:
     branches:
-      - main  # Adjust this branch name if needed
+      - main
 
 jobs:
-  convert:
+  convert-to-table:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - name: Print current directory
-        run: echo $PWD
-        
-      - name: List files
-        run: ls -R
-
       - name: Convert YAML to Table
-        run: |
-          npm install yamljs
-          node -e "const fs = require('fs'); const yaml = require('yamljs'); const data = yaml.load(fs.readFileSync('input.yml', 'utf8')); const table = Object.entries(data).map(([key, value]) => \`| \${key} | \${value} |\`).join('\n'); fs.writeFileSync('output.txt', table);"
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const fs = require('fs');
+            const yaml = require('js-yaml');
+
+            const fileContent = fs.readFileSync('input.yml', 'utf8');
+            const data = yaml.safeLoad(fileContent);
+
+            const tableData = Object.entries(data).map(([key, value]) => [key, value]);
+
+            console.log(table(tableData, { align: ['l', 'l'] }));
